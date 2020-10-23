@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # coding: utf-8
 
 # # 四子棋
@@ -8,8 +8,8 @@
 
 
 import numpy as np
+from termcolor import colored
 import math
-import random as rd
 
 
 # In[2]:
@@ -22,7 +22,7 @@ value1 = [0, math.inf, -math.inf]
 # In[3]:
 
 
-def draw(board):
+def draw(board, *pos):
     pieces = ['.', 'O', 'X']
     print()
     for i in range(WIDTH):
@@ -32,7 +32,10 @@ def draw(board):
         for j in range(WIDTH):
             k = int(board[i][j])
             try:
-                print(pieces[k],end=' ')
+                if pos[0]==i and pos[1]==j:
+                    print(colored(pieces[k],'red'),end=' ')
+                else:
+                    print(pieces[k],end=' ')
             except:
                 print(pieces[k],end=' ')
         print()
@@ -52,14 +55,14 @@ def winner(board):
        for i in range(HEIGHT-3):
            if board[i][j]==board[i+1][j]==board[i+2][j]==board[i+3][j]!=0:
                return board[i][j]
-
+   
    #斜的(左上右下)
    for i in range(HEIGHT-3):
        for j in range(WIDTH-3):
            if board[i][j]==board[i+1][j+1]==board[i+2][j+2]==board[i+3][j+3]!=0:
                return board[i][j]
-
-   #斜的(右上左下)
+           
+   #斜的(右上左下)        
    for i in range(3,HEIGHT):
        for j in range(3, WIDTH):
            if board[i][j-3]==board[i-1][j-2]==board[i-2][j-1]==board[i-3][j]!=0:
@@ -70,7 +73,7 @@ def winner(board):
            if board[i][j]==0:
                return 3  # 3代表遊戲還沒結束
    #平手
-   return 0
+   return 0  
 
 
 # In[5]:
@@ -141,13 +144,13 @@ def minimax(board, piece, value, depth, is_AI_turn):
     countX += 1
     win = int(winner(board))
     opp_piece = -piece #piece, opp_piece為 1,-1
-
+    
     if win!=3 or depth==0:
         if win!=3:
             return value[win]
         else:
             return score_position(board, piece)
-
+    
     if is_AI_turn:
         bestscore = -math.inf
         for j in range(WIDTH):
@@ -177,7 +180,7 @@ def minimax(board, piece, value, depth, is_AI_turn):
                 board[i][j] = 0
                 D[j] += 1
                 bestscore = min(bestscore, score)
-        return bestscore
+        return bestscore          
 
 
 # In[8]:
@@ -203,7 +206,7 @@ def ai_move(board, piece, value, depth):
                 y = j
             #D[j]-=1
     print(bestscore)
-    return y
+    return y 
 
 
 # In[9]:
@@ -214,13 +217,13 @@ def minimax_alphabeta(board, piece, value, depth, is_AI_turn, alpha=-math.inf, b
     countX += 1
     win = int(winner(board))
     opp_piece = -piece #piece, opp_piece為 1,-1
-
+    
     if win!=3 or depth==0:
         if win!=3:
             return value[win]
         else:
             return score_position(board, piece)
-
+    
     if is_AI_turn:
         bestscore = -math.inf
         for j in range(WIDTH):
@@ -256,7 +259,7 @@ def minimax_alphabeta(board, piece, value, depth, is_AI_turn, alpha=-math.inf, b
                 beta = min(beta, bestscore)
                 if alpha >= beta:
                     break
-        return bestscore
+        return bestscore          
 
 
 # In[10]:
@@ -282,7 +285,7 @@ def ai_move_alphabeta(board, piece, value, depth):
                 y = j
             #D[j]-=1
     print(bestscore)
-    return y
+    return y 
 
 
 # In[11]:
@@ -303,7 +306,7 @@ def regret(board, move):
 
 
 def game(board):
-
+    
     global countX
     print('四子棋 connect-4')
     print('輸入r悔棋')
@@ -351,19 +354,18 @@ def game(board):
             print('平手')
             break
         #-------玩家---------#
-
-        #-------電腦---------#
-        print('計算中...')
+    
+        #-------電腦---------#  
         ai2 = ai_move_alphabeta(board, PIECE2, value2, DEPTH)
         #ai2 = ai_move(board, PIECE2, value2, DEPTH)
         x = D[ai2]
         board[x][ai2] = PIECE2
         D[ai2]-=1
         move.append([x,ai2])
-        draw(board)
+        draw(board, x, ai2)
         print('countX = ', countX)
         countX = 0
-        global c
+        global c 
         c += 1
         #print(D)
         #print(HEIGHT, WIDTH)
@@ -372,15 +374,14 @@ def game(board):
             #print_b(board)
             break
         if winner(board)==PIECE2:
-            ouput = rd.choice(['菜雞', '嫩', '有夠廢哈哈', '484要刪game了','再來啊', '好爛喔', '阿不4很厲害'])
-            print('你輸了 '+ouput)
+            print('電腦贏了')
             break
         if winner(board)==0:
             print('平手')
             break
 
 
-# In[13]:
+# In[15]:
 
 
 HEIGHT = 6
@@ -393,7 +394,19 @@ countO = 0
 DEPTH = 4
 c = 0
 h = HEIGHT-1
-D = [h,h,h,h,h,h,h]
+D = [h,h,h,h,h,h,h] 
 move = []
 game(board)
+
+
+# In[6]:
+
+
+2**8
+
+
+# In[ ]:
+
+
+
 
