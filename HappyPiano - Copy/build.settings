@@ -1,0 +1,21 @@
+settings =
+{  
+    plugins =
+    {
+        ["plugin.fbAudienceNetwork"] =
+        {
+            publisherId = "com.coronalabs"
+        },
+    },
+    orientation =
+    {
+            default = "landscape",
+    },       
+    content=
+    {
+        width = 640,
+        height= 960,
+        scale="zoomStretch",
+    }, 
+        
+}
